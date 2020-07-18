@@ -75,18 +75,19 @@ namespace Zhaoxi.IOCDI.Framework.CustomContainer
             #endregion
 
             #region 方法注入
-            
-            //foreach (var meth in type.GetMethods().Where(p => p.IsDefined(typeof(ZhaoxiMethodAttribute), true)))
-            //{
-            //    List<object> methParaList = new List<object>();
-            //    foreach (var methPara in meth.GetParameters())//获取构造函数的参数
-            //    {
-            //        Type methParaType = methPara.ParameterType;//获取参数的类型 项目中是IUserDAL
-            //        object methParaInstance = this.ResolveObject(methParaType);
-            //        methParaList.Add(methParaInstance);//创建目标类型实例UserDAL
-            //    }
-                
-            //}
+
+            foreach (var meth in type.GetMethods().Where(p => p.IsDefined(typeof(ZhaoxiMethodAttribute), true)))
+            {
+                List<object> methParaList = new List<object>();
+                foreach (var methPara in meth.GetParameters())//获取构造函数的参数
+                {
+                    Type methParaType = methPara.ParameterType;//获取参数的类型 项目中是IUserDAL
+                    object methParaInstance = this.ResolveObject(methParaType);
+                    methParaList.Add(methParaInstance);//创建目标类型实例UserDAL
+                }
+                meth.Invoke(oInstance, methParaList.ToArray());
+
+            }
             #endregion
             return oInstance;
         }
