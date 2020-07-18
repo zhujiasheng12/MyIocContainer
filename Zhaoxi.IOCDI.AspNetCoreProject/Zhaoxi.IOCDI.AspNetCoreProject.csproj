@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zhaoxi.IOCDI.BLL\Zhaoxi.IOCDI.BLL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.DAL\Zhaoxi.IOCDI.DAL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Framework\Zhaoxi.IOCDI.Framework.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.IBLL\Zhaoxi.IOCDI.IBLL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.IDAL\Zhaoxi.IOCDI.IDAL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Interface\Zhaoxi.IOCDI.Interface.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Model\Zhaoxi.IOCDI.Model.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Service\Zhaoxi.IOCDI.Service.csproj" />
+  </ItemGroup>
+
+</Project>

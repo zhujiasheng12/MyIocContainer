@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zhaoxi.IOCDI.IBLL\Zhaoxi.IOCDI.IBLL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.IDAL\Zhaoxi.IOCDI.IDAL.csproj" />
+  </ItemGroup>
+
+</Project>

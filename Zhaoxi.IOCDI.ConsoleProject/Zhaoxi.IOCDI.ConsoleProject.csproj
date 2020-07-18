@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zhaoxi.ICODI.BLLV2\Zhaoxi.IOCDI.BLLV2.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.BLL\Zhaoxi.IOCDI.BLL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.DAL\Zhaoxi.IOCDI.DAL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Framework\Zhaoxi.IOCDI.Framework.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.IBLL\Zhaoxi.IOCDI.IBLL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.IDAL\Zhaoxi.IOCDI.IDAL.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Model\Zhaoxi.IOCDI.Model.csproj" />
+    <ProjectReference Include="..\Zhaoxi.IOCDI.Service\Zhaoxi.IOCDI.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
