@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Zhaoxi.IOCDI.Framework.CustomContainer
 {
-    [AttributeUsage (AttributeTargets.Constructor)]
+    /// <summary>
+    /// 标记构造函数注入
+    /// </summary>
+    [AttributeUsage (AttributeTargets.Constructor)]//标记构造函数注入
     public class ZhaoxiConstructorAttribute:Attribute
     {
     }

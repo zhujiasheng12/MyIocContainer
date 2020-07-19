@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Zhaoxi.IOCDI.Framework.CustomContainer
 {
-    [AttributeUsage (AttributeTargets.Method)]
+    /// <summary>
+    /// 标记方法注入
+    /// </summary>
+    [AttributeUsage (AttributeTargets.Method)]//标记方法注入
     public class ZhaoxiMethodAttribute : Attribute
     {
     }

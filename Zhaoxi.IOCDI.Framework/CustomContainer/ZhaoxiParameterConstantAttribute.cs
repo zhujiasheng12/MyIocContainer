@@ -5,10 +5,10 @@ using System.Text;
 namespace Zhaoxi.IOCDI.Framework.CustomContainer
 {
     /// <summary>
-    /// 标记属性注入
+    /// 这个是常量参数
     /// </summary>
-    [AttributeUsage (AttributeTargets.Property)]//标记属性注入
-    public class ZhaoxiPropertyInjectAttribute : Attribute
+    [AttributeUsage (AttributeTargets.Parameter)]//标记参数注入
+    public class ZhaoxiParameterConstantAttribute : Attribute
     {
     }
 }

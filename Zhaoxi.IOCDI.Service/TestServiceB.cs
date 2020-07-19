@@ -14,15 +14,38 @@ namespace Zhaoxi.IOCDI.Service
         [ZhaoxiPropertyInjectAttribute]
         public ITestServiceD TestServiceD { get; set; }
 
+        public int _iIndex { get; set; }
+        /// <summary>
+        /// 构造函数注入，有参数
+        /// </summary>
+        /// <param name="testServiceA"></param>
+        [ZhaoxiConstructor]
+        public TestServiceB(ITestServiceA testServiceA1, [ZhaoxiParameterConstant] string sIndex,ITestServiceA testServiceA2,[ZhaoxiParameterConstant]int iIndex)
+        {
+            _iIndex = iIndex;
+            Console.WriteLine($"{this.GetType().Name} 被构造。。。！参数是：{sIndex}  {iIndex}");
+        }
+        /// <summary>
+        /// 构造函数参数顺序不同
+        /// </summary>
+        /// <param name="iIndex"></param>
+        /// <param name="testServiceA"></param>
+        public TestServiceB( [ZhaoxiParameterConstant]int iIndex, ITestServiceA testServiceA)
+        {
+            _iIndex = iIndex;
+            Console.WriteLine($"{this.GetType().Name} 被构造。。。！参数是：{iIndex}");
+        }
+
         /// <summary>
         /// 构造函数注入
         /// </summary>
         /// <param name="testServiceA"></param>
-        public TestServiceB(ITestServiceA testServiceA)
+        //[ZhaoxiConstructor]
+        public TestServiceB(int iIndex)
         {
+            _iIndex = iIndex;
 
-            
-            Console.WriteLine($"{this.GetType().Name} 被构造。。。！");
+            Console.WriteLine($"{this.GetType().Name} 被构造。。。！参数为：{iIndex}");
         }
 
         private ITestServiceE _iTestServiceE = null;

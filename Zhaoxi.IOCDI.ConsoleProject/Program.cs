@@ -39,22 +39,22 @@ namespace Zhaoxi.IOCDI.ConsoleProject
                 #endregion
                 #region #0218
                 {
-                    //需求是上层仅依赖与抽象，就能完成对象的获取---需要写一个第三方工具---工厂就是做这个的
-                    //常规IOC容器：（第三方--业务无关）容器对象--注册--生成
-                    IZhaoxiContainer container = new ZhaoxiContainer();
-                    container.Register<IUserDAL, UserDAL>();
-                    container.Register<IUserBLL, UserBLL>();
-                    container.Register<ITestServiceA, TestServiceA>();
-                    container.Register<ITestServiceB, TestServiceB>();
-                    container.Register<ITestServiceC, TestServiceC>();
-                    container.Register<ITestServiceD, TestServiceD>();
-                    container.Register<ITestServiceE, TestServiceE>();
+                    ////需求是上层仅依赖与抽象，就能完成对象的获取---需要写一个第三方工具---工厂就是做这个的
+                    ////常规IOC容器：（第三方--业务无关）容器对象--注册--生成
+                    //IZhaoxiContainer container = new ZhaoxiContainer();
+                    //container.Register<IUserDAL, UserDAL>();
+                    //container.Register<IUserBLL, UserBLL>();
+                    //container.Register<ITestServiceA, TestServiceA>();
+                    //container.Register<ITestServiceB, TestServiceB>();
+                    //container.Register<ITestServiceC, TestServiceC>();
+                    //container.Register<ITestServiceD, TestServiceD>();
+                    //container.Register<ITestServiceE, TestServiceE>();
 
 
-                    ITestServiceB testServiceB = container.Resolve<ITestServiceB>();
-                    //IUserDAL userDAL = container.Resolve<IUserDAL>();
-                    //IUserBLL userBLL = container.Resolve<IUserBLL>();
-                    //为啥依赖抽象，而不是依赖细节--依赖倒置原则，
+                    //ITestServiceB testServiceB = container.Resolve<ITestServiceB>();
+                    ////IUserDAL userDAL = container.Resolve<IUserDAL>();
+                    ////IUserBLL userBLL = container.Resolve<IUserBLL>();
+                    ////为啥依赖抽象，而不是依赖细节--依赖倒置原则，
                 }
                 #endregion 
                 {
@@ -75,6 +75,27 @@ namespace Zhaoxi.IOCDI.ConsoleProject
 
                     //为啥不用自带的呢？   只支持构造函数注入
                 }
+
+                #region 0219
+                {
+                    //
+                    IZhaoxiContainer container = new ZhaoxiContainer();
+                    container.Register<IUserDAL, UserDAL>();
+                    container.Register<IUserDAL, UserDALMySql>("MySql");//单接口多实现，实质就是保存不同的key
+                    container.Register<IUserBLL, UserBLL>();
+                    container.Register<ITestServiceA, TestServiceA>();
+                    //container.Register<ITestServiceB, TestServiceB>();
+                    container.Register<ITestServiceB, TestServiceB>(paraList:new object[] {"jack", 3});
+
+                    container.Register<ITestServiceC, TestServiceC>();
+                    container.Register<ITestServiceD, TestServiceD>();
+                    container.Register<ITestServiceE, TestServiceE>();
+                    //ITestServiceB testServiceB = container.Resolve<ITestServiceB>();
+                    //IUserDAL userDAL = container.Resolve<IUserDAL>();
+                    //IUserDAL userDALMySql = container.Resolve<IUserDAL>("MySql");
+                    IUserBLL userBLL = container.Resolve<IUserBLL>();
+                }
+                #endregion
                 Console.WriteLine("****************** this is zhujiasheng12 的体验IOC实例  End ******************");
 
             }
