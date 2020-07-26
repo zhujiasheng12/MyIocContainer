@@ -57,6 +57,49 @@ private Dictionary<string, Type> ZhaoxiContainerDictionary = new Dictionary<stri
      
 3.方法注入
      使用特性[ZhaoxiMethodAttribute]标记方法
+
+4.生命周期管理   2020.7.25
+        瞬时
+        单例：声明一个字典或者其它类型来保存每个实例过的类型，每个来容器中请求对象的实例时，首先检测该类型在字典中是否实                  例化即可。
+        作用域单例：作用域单例  就是Http请求时，一个请求处理过程中，创建得都是同一个实例，不同得请求处理过程中，创建得就                            是不同得实例。得区分请求，HTTP请求---AspNet.Core内置kestrel，初始化一个容器实例，然后每次来一个很                            Http请求，就clone一个，或者叫创建一个子容器{包含注册关系}，然后一个请求就一个子容器实例，那么就可以做                            到请求单例了（其实就是子容器单例）。
+                            处理请求：
+                            if (this.ZhaoxiContainerScopeDictionary.ContainsKey(key))
+                            {
+                                return this.ZhaoxiContainerScopeDictionary[key];
+                            }
+                            else
+                            {
+                                break;
+                            }
+        还有一个线程单例，不做探究
+                           
+5.AOP扩展   2020.7.26
+         使用特性对AOP进行扩展 //1.能解决哪些方法不用AOP的问题//2.可以把切面逻辑转移到特性里面去
+         然后使用core的套娃式管道对AOP进行处理 。
+         特性的基类：
+                           public abstract  class BaseInterceptorAttribute : Attribute
+                          {
+                               public abstract Action Do(IInvocation invocation, Action action);
+        
+                          }
+
+          在AOP中处理如下：
+                           Action action = () => base.PerformProceed(invocation);
+
+                           if (method.IsDefined(typeof(BaseInterceptorAttribute), true))
+                           {
+                                foreach (var attribute in method.GetCustomAttributes<BaseInterceptorAttribute>().ToArray ().Reverse())
+                                {
+                                    action = attribute.Do(invocation,action);
+                                }
+                
+                           }
+                           //那就说明前面不能执行具体动作--前面只能是组装动作--配置管道模型--委托
+
+                          action.Invoke();
+6.AOP与IOC整合
+          IOC容器在最后返回结果时使用AOP注入即可。
+            
         
         
         

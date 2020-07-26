@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Zhaoxi.IOCDI.BLL;
 using Zhaoxi.IOCDI.DAL;
 using Zhaoxi.IOCDI.Framework;
+using Zhaoxi.IOCDI.Framework.CustomAOP;
 using Zhaoxi.IOCDI.Framework.CustomContainer;
 using Zhaoxi.IOCDI.IBLL;
 using Zhaoxi.IOCDI.IDAL;
@@ -147,38 +148,66 @@ namespace Zhaoxi.IOCDI.ConsoleProject
                     }
 
                     {
-                        container.Register<ITestServiceA, TestServiceA>(lifetimeType: LifetimeType.PerThread);
-                        ITestServiceA a1 = container.Resolve<ITestServiceA>();
-                        ITestServiceA a2 = container.Resolve<ITestServiceA>();
-                        ITestServiceA a3 = null;
-                        ITestServiceA a4 = null;
-                        ITestServiceA a5 = null;
-                        Task.Run(() =>
-                        {
-                            Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a3");
-                             a3 = container.Resolve<ITestServiceA>();
-                        });
+                        //container.Register<ITestServiceA, TestServiceA>(lifetimeType: LifetimeType.PerThread);
+                        //ITestServiceA a1 = container.Resolve<ITestServiceA>();
+                        //ITestServiceA a2 = container.Resolve<ITestServiceA>();
+                        //ITestServiceA a3 = null;
+                        //ITestServiceA a4 = null;
+                        //ITestServiceA a5 = null;
+                        //Task.Run(() =>
+                        //{
+                        //    Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a3");
+                        //     a3 = container.Resolve<ITestServiceA>();
+                        //});
 
-                        Task.Run(() =>
-                        {
-                            Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a4");
-                            a4 = container.Resolve<ITestServiceA>();
-                        }).ContinueWith (t=> {
-                            Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a5");
-                            a5 = container.Resolve<ITestServiceA>();
-                        });
-                        Thread.Sleep(1000);
-                        Console.WriteLine(object.ReferenceEquals(a1, a2));
-                        Console.WriteLine(object.ReferenceEquals(a1, a3));
-                        Console.WriteLine(object.ReferenceEquals(a1, a4));
-                        Console.WriteLine(object.ReferenceEquals(a1, a5));
+                        //Task.Run(() =>
+                        //{
+                        //    Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a4");
+                        //    a4 = container.Resolve<ITestServiceA>();
+                        //}).ContinueWith (t=> {
+                        //    Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a5");
+                        //    a5 = container.Resolve<ITestServiceA>();
+                        //});
+                        //Thread.Sleep(1000);
+                        //Console.WriteLine(object.ReferenceEquals(a1, a2));
+                        //Console.WriteLine(object.ReferenceEquals(a1, a3));
+                        //Console.WriteLine(object.ReferenceEquals(a1, a4));
+                        //Console.WriteLine(object.ReferenceEquals(a1, a5));
 
-                        Console.WriteLine(object.ReferenceEquals(a3, a4));
-                        Console.WriteLine(object.ReferenceEquals(a3, a5));
+                        //Console.WriteLine(object.ReferenceEquals(a3, a4));
+                        //Console.WriteLine(object.ReferenceEquals(a3, a5));
 
-                        Console.WriteLine(object.ReferenceEquals(a4, a5));
+                        //Console.WriteLine(object.ReferenceEquals(a4, a5));
                     }
 
+                }
+                #endregion
+
+
+                #region 0225
+                {
+                    //IOC+AOP
+                    //CustomAOPTest.Show();
+
+                    //interface with target--帮你AOP一下
+                    //IOC容器，可以基于抽象完成对象的实例化
+                    IZhaoxiContainer container = new ZhaoxiContainer();
+                    container.Register<ITestServiceA, TestServiceA>(lifetimeType :LifetimeType.Singleton);
+                    container.Register<ITestServiceB, TestServiceB>(paraList: new object[] { "jack", 3 }, lifetimeType: LifetimeType.Singleton);
+
+                    container.Register<ITestServiceC, TestServiceC>(lifetimeType: LifetimeType.Singleton);
+                    container.Register<ITestServiceD, TestServiceD>(lifetimeType: LifetimeType.Singleton);
+                    container.Register<ITestServiceE, TestServiceE>(lifetimeType: LifetimeType.Singleton);
+                    ITestServiceA a1 = container.Resolve<ITestServiceA>();
+                    a1.Show();
+                    a1.Show1();
+                    ITestServiceB b1 = container.Resolve<ITestServiceB>();
+                    b1.Show();
+
+                    //a1 = (ITestServiceA)a1.AOP(typeof(ITestServiceA));
+                    //a1.Show();
+                    //a1.Show1();
+                    //现在有的工具是1，  1生2，2生3，3生万物
                 }
                 #endregion
                 Console.WriteLine("****************** this is zhujiasheng12 的体验IOC实例  End ******************");

@@ -14,5 +14,10 @@ namespace Zhaoxi.IOCDI.Service
         {
             Console.WriteLine($"this is TestServiceA A123456");
         }
+
+        public void Show1()
+        {
+            Console.WriteLine($"this is TestServiceA A1234561111111111");
+        }
     }
 }

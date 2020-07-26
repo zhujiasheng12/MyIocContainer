@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using Zhaoxi.IOCDI.Framework.CustomAOP;
 
 namespace Zhaoxi.IOCDI.Framework.CustomContainer
 {
@@ -202,7 +203,9 @@ namespace Zhaoxi.IOCDI.Framework.CustomContainer
                     break;
             }
             #endregion
-            return oInstance;
+
+            return oInstance.AOP(abstractType);//整合AOP与IOC
+            //return oInstance;
         }
 
 

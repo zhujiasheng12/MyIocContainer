@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Zhaoxi.IOCDI.Framework.CustomContainer
+namespace Zhaoxi.IOCDI.Framework
 {
     public class CustomCallContext<T>
     {
