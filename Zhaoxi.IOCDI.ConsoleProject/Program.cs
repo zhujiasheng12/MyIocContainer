@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Zhaoxi.IOCDI.BLL;
 using Zhaoxi.IOCDI.DAL;
 using Zhaoxi.IOCDI.Framework;
@@ -79,21 +81,104 @@ namespace Zhaoxi.IOCDI.ConsoleProject
                 #region 0219
                 {
                     //
-                    IZhaoxiContainer container = new ZhaoxiContainer();
-                    container.Register<IUserDAL, UserDAL>();
-                    container.Register<IUserDAL, UserDALMySql>("MySql");//单接口多实现，实质就是保存不同的key
-                    container.Register<IUserBLL, UserBLL>();
-                    container.Register<ITestServiceA, TestServiceA>();
-                    //container.Register<ITestServiceB, TestServiceB>();
-                    container.Register<ITestServiceB, TestServiceB>(paraList:new object[] {"jack", 3});
+                    //IZhaoxiContainer container = new ZhaoxiContainer();
+                    //container.Register<IUserDAL, UserDAL>();
+                    //container.Register<IUserDAL, UserDALMySql>("MySql");//单接口多实现，实质就是保存不同的key
+                    //container.Register<IUserBLL, UserBLL>();
+                    //container.Register<ITestServiceA, TestServiceA>();
+                    ////container.Register<ITestServiceB, TestServiceB>();
+                    //container.Register<ITestServiceB, TestServiceB>(paraList:new object[] {"jack", 3});
 
-                    container.Register<ITestServiceC, TestServiceC>();
-                    container.Register<ITestServiceD, TestServiceD>();
-                    container.Register<ITestServiceE, TestServiceE>();
-                    //ITestServiceB testServiceB = container.Resolve<ITestServiceB>();
-                    //IUserDAL userDAL = container.Resolve<IUserDAL>();
-                    //IUserDAL userDALMySql = container.Resolve<IUserDAL>("MySql");
-                    IUserBLL userBLL = container.Resolve<IUserBLL>();
+                    //container.Register<ITestServiceC, TestServiceC>();
+                    //container.Register<ITestServiceD, TestServiceD>();
+                    //container.Register<ITestServiceE, TestServiceE>();
+                    ////ITestServiceB testServiceB = container.Resolve<ITestServiceB>();
+                    ////IUserDAL userDAL = container.Resolve<IUserDAL>();
+                    ////IUserDAL userDALMySql = container.Resolve<IUserDAL>("MySql");
+                    //IUserBLL userBLL = container.Resolve<IUserBLL>();
+                }
+                #endregion
+
+
+                #region 0224
+                {
+                    //手写IOC容器--支持构造函数注入，属性注入，方法注入，---无限极注入---单接口多实现---指定参数值构造
+                    //加点料，对象都是我创建的，加点对象生命周期管理--是否重用对象
+                    IZhaoxiContainer container = new ZhaoxiContainer();
+                    //1,瞬时（最基本的）。
+                    {
+                        //瞬时
+                        //container.Register<ITestServiceA, TestServiceA>(lifetimeType :LifetimeType .Transient);
+                        //ITestServiceA a1 = container.Resolve<ITestServiceA>();
+                        //ITestServiceA a2 = container.Resolve<ITestServiceA>();
+                        //Console.WriteLine(object.ReferenceEquals(a1, a2));//F的原因是每次都在重新构造
+                    }
+
+                    //2，单例。
+                    {
+                        //container.Register<ITestServiceA, TestServiceA>(lifetimeType: LifetimeType.Singleton);
+                        //ITestServiceA a1 = container.Resolve<ITestServiceA>();
+                        //ITestServiceA a2 = container.Resolve<ITestServiceA>();
+                        //Console.WriteLine(object.ReferenceEquals(a1, a2));//F的原因是每次都在重新构造
+                    }
+                    //3，作用域单例  就是Http请求时，一个请求处理过程中，创建得都是同一个实例，不同得请求处理过程中，创建得就是不同得实例
+                    {
+                        //得区分请求，HTTP请求---AspNet.Core内置kestrel，初始化一个容器实例，然后每次来一个很Http请i去，就clone一个，或者叫创建一个子容器{包含注册关系}，然后一个请求就一个子容器实例，那么就可以做到请求单例了（其实就是子容器单例）。
+                        //container.Register<ITestServiceA, TestServiceA>(lifetimeType: LifetimeType.Scope);
+                        //ITestServiceA a1 = container.Resolve<ITestServiceA>();
+                        //ITestServiceA a2 = container.Resolve<ITestServiceA>();
+
+                        //IZhaoxiContainer container1 = container.CreateChildContainer();
+                        //ITestServiceA a11 = container1.Resolve<ITestServiceA>();
+                        //ITestServiceA a12 = container1.Resolve<ITestServiceA>();
+
+                        //IZhaoxiContainer container2 = container.CreateChildContainer();
+                        //ITestServiceA a21 = container2.Resolve<ITestServiceA>();
+                        //ITestServiceA a22 = container2.Resolve<ITestServiceA>();
+                        //Console.WriteLine(object.ReferenceEquals(a1, a2));//F的原因是每次都在重新构造
+                        //Console.WriteLine(object.ReferenceEquals(a11, a12));//F的原因是每次都在重新构造
+                        //Console.WriteLine(object.ReferenceEquals(a21, a22));//F的原因是每次都在重新构造
+
+
+                        //Console.WriteLine(object.ReferenceEquals(a11, a21));//F的原因是每次都在重新构造
+                        //Console.WriteLine(object.ReferenceEquals(a11, a22));//F的原因是每次都在重新构造
+                        //Console.WriteLine(object.ReferenceEquals(a12, a21));//F的原因是每次都在重新构造
+                        //Console.WriteLine(object.ReferenceEquals(a12, a22));//F的原因是每次都在重新构造
+                    }
+
+                    {
+                        container.Register<ITestServiceA, TestServiceA>(lifetimeType: LifetimeType.PerThread);
+                        ITestServiceA a1 = container.Resolve<ITestServiceA>();
+                        ITestServiceA a2 = container.Resolve<ITestServiceA>();
+                        ITestServiceA a3 = null;
+                        ITestServiceA a4 = null;
+                        ITestServiceA a5 = null;
+                        Task.Run(() =>
+                        {
+                            Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a3");
+                             a3 = container.Resolve<ITestServiceA>();
+                        });
+
+                        Task.Run(() =>
+                        {
+                            Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a4");
+                            a4 = container.Resolve<ITestServiceA>();
+                        }).ContinueWith (t=> {
+                            Console.WriteLine($"This is {Thread.CurrentThread.ManagedThreadId} a5");
+                            a5 = container.Resolve<ITestServiceA>();
+                        });
+                        Thread.Sleep(1000);
+                        Console.WriteLine(object.ReferenceEquals(a1, a2));
+                        Console.WriteLine(object.ReferenceEquals(a1, a3));
+                        Console.WriteLine(object.ReferenceEquals(a1, a4));
+                        Console.WriteLine(object.ReferenceEquals(a1, a5));
+
+                        Console.WriteLine(object.ReferenceEquals(a3, a4));
+                        Console.WriteLine(object.ReferenceEquals(a3, a5));
+
+                        Console.WriteLine(object.ReferenceEquals(a4, a5));
+                    }
+
                 }
                 #endregion
                 Console.WriteLine("****************** this is zhujiasheng12 的体验IOC实例  End ******************");

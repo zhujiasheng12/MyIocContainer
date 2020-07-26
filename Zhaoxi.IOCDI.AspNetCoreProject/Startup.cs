@@ -12,6 +12,8 @@ using Zhaoxi.IOCDI.BLL;
 using Zhaoxi.IOCDI.DAL;
 using Zhaoxi.IOCDI.IBLL;
 using Zhaoxi.IOCDI.IDAL;
+using Zhaoxi.IOCDI.Interface;
+using Zhaoxi.IOCDI.Service;
 
 namespace Zhaoxi.IOCDI.AspNetCoreProject
 {
@@ -28,8 +30,9 @@ namespace Zhaoxi.IOCDI.AspNetCoreProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<IUserDAL, UserDAL>();
-            services.AddTransient<IUserBLL, UserBLL>();
+            services.AddTransient<IUserDAL, UserDAL>();//瞬时
+            services.AddSingleton<IUserBLL, UserBLL>();//单例
+            services.AddScoped<ITestServiceA, TestServiceA>();//作用域单例
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
